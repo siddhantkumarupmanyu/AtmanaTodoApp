@@ -5,7 +5,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/common_list_view" />
+        <include
+            android:id="@+id/common_list_view"
+            layout="@layout/common_list_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
