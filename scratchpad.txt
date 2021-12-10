@@ -2,8 +2,7 @@
 
 
 
-
 what is with this avatar thing
-    - TBH, I do not want to use two different layout.
-    - I have no problem with loading thought 4 lines of glide and it will work
-    - just skipping for now
+    - TBH, I do not want to use two different list layout.
+    - I have no problem with loading images, 4 lines of glide and it will work
+    - ignoring/skipping for now

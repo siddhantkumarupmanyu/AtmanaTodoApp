@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import sku.challenge.atmanatodoapp.R
+import sku.challenge.atmanatodoapp.vo.Item
 
 
 class LocalFragment : Fragment() {
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,5 +26,11 @@ class LocalFragment : Fragment() {
 
         @JvmStatic
         fun newInstance() = LocalFragment()
+
+        // fun fakeData(): List<Item> {
+        //     listOf(
+        //         Item(0, "example@exmaple.com", )
+        //     )
+        // }
     }
 }
