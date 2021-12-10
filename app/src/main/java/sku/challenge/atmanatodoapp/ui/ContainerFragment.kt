@@ -1,60 +1,80 @@
 package sku.challenge.atmanatodoapp.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import sku.challenge.atmanatodoapp.R
+import sku.challenge.atmanatodoapp.databinding.FragmentContainerBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ContainerFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+const val FRAGMENTS_COUNT = 2
+
+@AndroidEntryPoint
 class ContainerFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentContainerBinding? = null
+
+    private val binding: FragmentContainerBinding
+        get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_container, container, false)
+    ): View {
+        _binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_container,
+            container,
+            false
+        )
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ContainerFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ContainerFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        binding.pager.adapter = ContainerViewPagerAdapter(this)
+
+        TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+            tab.text = when (position) {
+                0 -> RemoteFragment.FRAGMENT_TAB_NAME
+                1 -> LocalFragment.FRAGMENT_TAB_NAME
+                else -> "Unknown"
+            }
+        }.attach()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private class ContainerViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+
+        override fun getItemCount() = FRAGMENTS_COUNT
+
+        override fun createFragment(position: Int): Fragment {
+            return when (position) {
+                0 -> {
+                    RemoteFragment.newInstance()
+                }
+                1 -> {
+                    LocalFragment.newInstance()
+                }
+                else -> {
+                    throw UnsupportedOperationException("This code should never be executed")
                 }
             }
+        }
+
     }
 }
