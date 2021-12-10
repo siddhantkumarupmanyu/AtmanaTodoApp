@@ -8,7 +8,7 @@ class EndToEndTest {
     //  I do not think it has anything functionality apart from UI
     @Test
     fun localTodos() {
-        // insert a item
+        // insert an item
         // edit that item
         // delete that item
 
