@@ -70,7 +70,10 @@ class LocalFragment : Fragment(), ItemButtonListener {
     }
 
     override fun delete(position: Int) {
-        TODO("Not yet implemented")
+        val adapter = binding.commonListView.listView.adapter as ListViewAdapter
+        val item = adapter.currentList[position]
+
+        localViewModel.deleteItem(item)
     }
 
     override fun onDestroyView() {

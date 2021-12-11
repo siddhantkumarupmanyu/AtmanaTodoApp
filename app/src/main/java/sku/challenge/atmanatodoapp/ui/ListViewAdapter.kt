@@ -40,8 +40,8 @@ class ListViewAdapter(
             }
 
             binding.deleteImageButton.setOnClickListener {
-                // TODO get item position
-                listener.delete(0)
+                val position = adapterPosition
+                listener.delete(position)
             }
         }
 

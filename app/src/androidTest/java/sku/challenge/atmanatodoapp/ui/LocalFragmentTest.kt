@@ -12,6 +12,8 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.core.AllOf.allOf
 import org.junit.Before
@@ -19,12 +21,13 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.eq
+import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import sku.challenge.atmanatodoapp.R
 import sku.challenge.atmanatodoapp.di.AppModule
-import sku.challenge.atmanatodoapp.fake.FakeRepository
 import sku.challenge.atmanatodoapp.repository.ItemRepository
 import sku.challenge.atmanatodoapp.test_utils.*
+import sku.challenge.atmanatodoapp.vo.Item
 
 
 @ExperimentalCoroutinesApi
@@ -41,7 +44,7 @@ class LocalFragmentTest {
     val dataBindingIdlingResourceRule = DataBindingIdlingResourceRule()
 
     @BindValue
-    val repository: ItemRepository = FakeRepository()
+    val repository: ItemRepository = mock()
 
     private val navController = mock<NavController>()
 
@@ -50,8 +53,8 @@ class LocalFragmentTest {
         // Populate @Inject fields in test class
         hiltRule.inject()
 
-        repository as FakeRepository
-        repository.items = listOf(DummyData.items(1, 6, 1))
+
+        `when`(repository.getLocalItems()).thenReturn(flowOf(DummyData.items(1, 6, 1)))
 
         launchFragmentInHiltContainer<LocalFragment> {
             dataBindingIdlingResourceRule.monitorFragment(this)
@@ -83,7 +86,7 @@ class LocalFragmentTest {
     }
 
     @Test
-    fun shouldDeleteItem() {
+    fun shouldDeleteItem() = runBlocking {
         onView(listMatcher().atPosition(1)).check(matches(hasDescendant(withText("person2.page1@reqres.in"))))
 
         onView(
@@ -95,7 +98,16 @@ class LocalFragmentTest {
             click()
         )
 
+        delay(50)
 
+        verify(repository).deleteLocalItem(
+            Item(
+                "person2.page1@reqres.in",
+                "Firstname2-1",
+                "Lastname2-1",
+                2
+            )
+        )
     }
 
 
