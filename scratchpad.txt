@@ -1,4 +1,6 @@
 
+not adding code coverage. Setting Jacoco is pain in a**
+
 structure ui Fragment in packages
 
 // LOCAL
