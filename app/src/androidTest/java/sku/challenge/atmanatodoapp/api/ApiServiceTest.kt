@@ -75,6 +75,20 @@ class ApiServiceTest {
 
     }
 
+    @Test
+    fun shouldHaveEmptyList_WhenThereIsNoData() = runTest {
+        mockWebServer.enqueueResponse("page3.json")
+
+        val fetchedPage = service.getPage(3)
+
+        val request = mockWebServer.takeRequest(2, TimeUnit.SECONDS)
+        assertThat(request.path, `is`("/users?page=3"))
+
+        assertThat(fetchedPage.page, `is`(3))
+
+        assertThat(fetchedPage.data, `is`(emptyList()))
+    }
+
     private fun assertItem(
         item: Item,
         id: Int,

@@ -1,5 +1,7 @@
 
 
+considering no data as Success too, in this case list is just empty
+
 api return same data for page 1 and page 0
 
 let store current FetchedPage in RemoteViewModel only
