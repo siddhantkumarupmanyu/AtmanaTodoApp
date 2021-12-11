@@ -1,6 +1,11 @@
 
 
-actually loadingMore should be considered differentOption than Initial Loading
+Not Going to add ProgressBar, this case is getting much complkicated and deadline is less
+    - as challenge says just adding a load more textview
+        - will load new data when clicked on it.
+
+actually loadingMore should be considered different than Initial Loading
+    - this makes the loading progressBar at the end easy but see above
     - ignoring that for now
 
 considering no data as Success too, in this case list is just empty

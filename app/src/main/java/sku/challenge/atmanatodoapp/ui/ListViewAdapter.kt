@@ -1,5 +1,6 @@
 package sku.challenge.atmanatodoapp.ui
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,7 +13,13 @@ class ListViewAdapter(
 ) : ListAdapter<Item, RecyclerView.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        TODO("Not yet implemented")
+        return ListItemViewHolder(
+            ListItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -30,7 +37,9 @@ class ListViewAdapter(
         }
 
         fun bind(item: Item) {
-            binding.item = item
+            binding.idTextview.text = item.id.toString()
+            binding.emailTextview.text = item.email
+            binding.nameTextview.text = "${item.firstName} ${item.lastName}"
 
             binding.executePendingBindings()
         }

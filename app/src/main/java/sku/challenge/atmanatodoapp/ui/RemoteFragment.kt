@@ -60,6 +60,8 @@ class RemoteFragment : Fragment() {
                 }
             }
         }
+
+        remoteViewModel.fetchNextPage()
     }
 
     private fun loadNewData(data: List<Item>) {
@@ -68,7 +70,7 @@ class RemoteFragment : Fragment() {
     }
 
     private fun showLoadingMoreProgressBar() {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override fun onDestroyView() {

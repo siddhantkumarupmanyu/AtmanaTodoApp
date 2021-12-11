@@ -47,6 +47,11 @@ class RemoteFragmentTest {
         // Populate @Inject fields in test class
         hiltRule.inject()
 
+        repository as FakeRepository
+        repository.pageNo = 1
+        repository.delayBeforeReturningResult = 10L
+        repository.fetchedPage = DummyData.fetchedPage(1, 1, 6)
+
         launchFragmentInHiltContainer<RemoteFragment> {
             dataBindingIdlingResourceRule.monitorFragment(this)
         }
@@ -54,16 +59,19 @@ class RemoteFragmentTest {
 
     @Test
     fun loadItems_WhenFragmentIsSetUp(): Unit = runBlocking {
-        repository as FakeRepository
-        repository.delayBeforeReturningResult = 10L
-        repository.fetchedPage = DummyData.fetchedPage(1, 1, 6)
-
         onView(listMatcher().atPosition(1)).check(matches(hasDescendant(withText("Firstname2-1 Lastname2-1"))))
     }
 
     @Test
-    @Ignore
     fun loadMoreData_OnReachingEndOfTheList() {
+        repository as FakeRepository
+
+        onView(listMatcher().atPosition(1)).check(matches(hasDescendant(withText("Firstname2-1 Lastname2-1"))))
+
+        repository.pageNo = 2
+        repository.delayBeforeReturningResult = 10L
+        repository.fetchedPage = DummyData.fetchedPage(2, 7, 6)
+
 
     }
 
@@ -74,5 +82,6 @@ class RemoteFragmentTest {
     }
 
 
-    private fun listMatcher() = RecyclerViewMatcher(R.id.list_view)
+    // IDK but espresso is unable to find recyclerview with id list_view
+    private fun listMatcher() = RecyclerViewMatcher(R.id.common_list_view)
 }
