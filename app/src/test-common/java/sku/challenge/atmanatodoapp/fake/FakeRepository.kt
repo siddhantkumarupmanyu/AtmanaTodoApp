@@ -2,6 +2,7 @@ package sku.challenge.atmanatodoapp.fake
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.hamcrest.core.IsEqual.equalTo
@@ -13,6 +14,10 @@ class FakeRepository : ItemRepository {
     var pageNo: Int = 0
     var delayBeforeReturningResult: Long = 0
     var fetchedPage: FetchedPage = FetchedPage(0, emptyList())
+
+    var items: List<List<Item>> = emptyList()
+
+    var item: Item = Item("", "", "", -1)
 
     var fetchRemotePageCalledTimes: Int = 0
         private set
@@ -28,10 +33,10 @@ class FakeRepository : ItemRepository {
     }
 
     override fun getLocalItems(): Flow<List<Item>> {
-        TODO("Not yet implemented")
+        return flowOf(*items.toTypedArray())
     }
 
     override suspend fun getItem(id: Int): Item {
-        TODO("Not yet implemented")
+        return item
     }
 }
