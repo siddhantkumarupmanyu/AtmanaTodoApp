@@ -68,6 +68,33 @@ class RemoteViewModelTest {
         val items = (viewModel.items.first() as RemoteViewModel.FetchedPageResult.Success).data
 
         assertThat(items, `is`(equalTo(DummyData.items(1, 6, 1))))
+
+        fakeRepository.pageNo = 2
+        fakeRepository.fetchedPage = DummyData.fetchedPage(2, 7, 6)
+
+        viewModel.fetchNextPage()
+
+        yield()
+        assertThat(
+            viewModel.items.first(),
+            IsInstanceOf(RemoteViewModel.FetchedPageResult.Loading::class.java)
+        )
+
+        delay(20L)
+
+        assertThat(
+            viewModel.items.first(),
+            IsInstanceOf(RemoteViewModel.FetchedPageResult.Success::class.java)
+        )
+
+        val itemsCombined =
+            (viewModel.items.first() as RemoteViewModel.FetchedPageResult.Success).data
+
+        assertThat(itemsCombined.size, `is`(equalTo(12)))
+        assertThat(
+            itemsCombined,
+            `is`(equalTo(DummyData.items(1, 6, 1) + DummyData.items(7, 6, 2)))
+        )
     }
 
     @Test

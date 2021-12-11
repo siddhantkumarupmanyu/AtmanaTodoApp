@@ -1,5 +1,8 @@
 
 
+actually loadingMore should be considered differentOption than Initial Loading
+    - ignoring that for now
+
 considering no data as Success too, in this case list is just empty
 
 api return same data for page 1 and page 0

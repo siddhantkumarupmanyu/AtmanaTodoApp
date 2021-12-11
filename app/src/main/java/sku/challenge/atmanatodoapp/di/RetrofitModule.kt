@@ -35,12 +35,4 @@ object RetrofitModule {
             .create(ApiService::class.java)
     }
 
-    // not working
-    // // https://stackoverflow.com/a/54056042
-    // @Provides
-    // fun providesIsInternetAvailable(client: OkHttpClient): suspend () -> Boolean {
-    //     val checker = InternetChecker(BASE_URL, client)
-    //     return checker::isInternetConnectionAvailable
-    // }
-
 }

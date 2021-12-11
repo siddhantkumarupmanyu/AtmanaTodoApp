@@ -2,14 +2,17 @@ package sku.challenge.atmanatodoapp.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import sku.challenge.atmanatodoapp.repository.ItemRepository
 import sku.challenge.atmanatodoapp.vo.FetchedPage
 import sku.challenge.atmanatodoapp.vo.Item
+import javax.inject.Inject
 
-class RemoteViewModel(
+@HiltViewModel
+class RemoteViewModel @Inject constructor(
     private val itemRepository: ItemRepository
 ) : ViewModel() {
 
@@ -26,10 +29,12 @@ class RemoteViewModel(
             if (isCurrentPageWithEmptyData()) {
                 return@launch
             }
+            var items = (items.value as FetchedPageResult.Success).data
             _items.value = FetchedPageResult.Loading
             val nextPage = itemRepository.fetchRemotePage(currentPage.page + 1)
             currentPage = nextPage
-            _items.value = FetchedPageResult.Success(currentPage.data)
+            items = items + nextPage.data
+            _items.value = FetchedPageResult.Success(items)
         }
     }
 
