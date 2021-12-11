@@ -1,7 +1,7 @@
 
+structure ui Fragment in packages
 
 // LOCAL
-
 
 // REMOTE (will complete it after Local)
 

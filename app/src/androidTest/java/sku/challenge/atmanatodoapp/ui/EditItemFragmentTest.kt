@@ -2,19 +2,27 @@ package sku.challenge.atmanatodoapp.ui
 
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
+import sku.challenge.atmanatodoapp.R
 import sku.challenge.atmanatodoapp.di.AppModule
 import sku.challenge.atmanatodoapp.repository.ItemRepository
 import sku.challenge.atmanatodoapp.test_utils.DataBindingIdlingResourceRule
@@ -49,18 +57,38 @@ class EditItemFragmentTest {
         hiltRule.inject()
 
         `when`(repository.getItem(1)).thenReturn(item)
-
-        launchFragmentInHiltContainer<LocalFragment> {
-            dataBindingIdlingResourceRule.monitorFragment(this)
-            Navigation.setViewNavController(requireView(), navController)
-        }
     }
 
-    // @Test
+    @Test
+    fun addNewItem(): Unit = runBlocking {
+        val args = EditItemFragmentArgs(-1).toBundle()
+        launchFragmentInHiltContainer<EditItemFragment>(fragmentArgs = args, action = {
+            dataBindingIdlingResourceRule.monitorFragment(this)
+            Navigation.setViewNavController(requireView(), navController)
+        })
+
+        onView(withId(R.id.first_name_edit_text)).check(matches(withText("")))
+        onView(withId(R.id.last_name_edit_text)).check(matches(withText("")))
+        onView(withId(R.id.email_edit_text)).check(matches(withText("")))
+
+        onView(withId(R.id.first_name_edit_text)).perform(typeText("firstName"))
+        onView(withId(R.id.last_name_edit_text)).perform(typeText("lastName"))
+        onView(withId(R.id.email_edit_text)).perform(typeText("email"))
+
+        onView(withId(R.id.save)).perform(click())
+
+        verify(navController).navigateUp()
+        verify(repository).saveLocalItem(Item("email", "firstName", "lastName", 0))
+    }
 
     @Test
-    @Ignore
-    fun navigateBackOnSave() {
+    fun editItem() {
+        // val args =
+        // launchFragmentInHiltContainer<EditItemFragment>() {
+        //     dataBindingIdlingResourceRule.monitorFragment(this)
+        //     Navigation.setViewNavController(requireView(), navController)
+        // }
+
 
     }
 

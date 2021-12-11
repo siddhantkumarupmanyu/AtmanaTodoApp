@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import sku.challenge.atmanatodoapp.R
 import sku.challenge.atmanatodoapp.databinding.FragmentEditItemBinding
@@ -17,6 +19,8 @@ class EditItemFragment : Fragment() {
 
     private val binding: FragmentEditItemBinding
         get() = _binding!!
+
+    private val editItemViewModel by viewModels<EditItemViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +40,16 @@ class EditItemFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.lifecycleOwner = viewLifecycleOwner
-        
 
+        binding.save.setOnClickListener {
+            editItemViewModel.saveItem(
+                email = binding.emailEditText.text.toString(),
+                firstName = binding.firstNameEditText.text.toString(),
+                lastName = binding.lastNameEditText.text.toString()
+            )
+
+            findNavController().navigateUp()
+        }
     }
 
     override fun onDestroyView() {
