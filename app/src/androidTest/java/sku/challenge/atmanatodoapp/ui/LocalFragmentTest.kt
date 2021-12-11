@@ -15,7 +15,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.core.AllOf.allOf
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -84,9 +83,19 @@ class LocalFragmentTest {
     }
 
     @Test
-    @Ignore
     fun shouldDeleteItem() {
-        // onView(listMatcher().atPosition(1)).
+        onView(listMatcher().atPosition(1)).check(matches(hasDescendant(withText("person2.page1@reqres.in"))))
+
+        onView(
+            allOf(
+                withId(R.id.delete_image_button),
+                hasSibling(withText("person2.page1@reqres.in"))
+            )
+        ).perform(
+            click()
+        )
+
+
     }
 
 

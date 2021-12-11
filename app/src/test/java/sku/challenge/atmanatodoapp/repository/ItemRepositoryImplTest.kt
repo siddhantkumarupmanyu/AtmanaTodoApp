@@ -36,4 +36,9 @@ class ItemRepositoryImplTest {
         verify(dao).getItem(1)
     }
 
+    @Test
+    fun editAndDeleteLocalItem(){
+        // todo:
+    }
+
 }

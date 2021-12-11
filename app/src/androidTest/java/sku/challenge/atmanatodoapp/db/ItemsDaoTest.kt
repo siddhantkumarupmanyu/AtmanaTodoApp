@@ -6,6 +6,7 @@ import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.hamcrest.core.IsEqual.equalTo
+import org.hamcrest.core.IsNull.nullValue
 import org.junit.Test
 import sku.challenge.atmanatodoapp.vo.Item
 
@@ -40,6 +41,22 @@ class ItemsDaoTest : DbTest() {
         itemsDao.insertItems(item1, item2)
 
         assertThat(itemsDao.getItem(1), `is`(equalTo(item1.copy(id = 1))))
+    }
+
+    @Test
+    fun editAndDeleteItem() = runTest {
+        val item1 = Item("1@eg.com", "f1", "l1")
+        itemsDao.insertItems(item1)
+
+        assertThat(itemsDao.getItem(1), `is`(equalTo(item1.copy(id = 1))))
+
+        val editedItem = item1.copy(firstName = "firstName", id = 1)
+
+        itemsDao.insertItems(editedItem)
+        assertThat(itemsDao.getItem(1), `is`(equalTo(editedItem)))
+
+        itemsDao.deleteItem(editedItem)
+        assertThat(itemsDao.getItem(1), `is`(nullValue()))
     }
 
 }

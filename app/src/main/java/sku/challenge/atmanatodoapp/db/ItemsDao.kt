@@ -1,9 +1,6 @@
 package sku.challenge.atmanatodoapp.db
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import sku.challenge.atmanatodoapp.vo.Item
 
@@ -19,5 +16,8 @@ abstract class ItemsDao {
 
     @Query("SELECT * FROM item WHERE id = :id")
     abstract suspend fun getItem(id: Int): Item
+
+    @Delete
+    abstract fun deleteItem(item: Item)
 
 }
