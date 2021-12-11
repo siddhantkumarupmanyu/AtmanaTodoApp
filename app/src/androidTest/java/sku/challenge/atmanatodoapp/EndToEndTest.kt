@@ -3,7 +3,7 @@ package sku.challenge.atmanatodoapp
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -12,11 +12,15 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
+import org.hamcrest.core.AllOf.allOf
+import org.hamcrest.core.IsNot.not
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -54,24 +58,62 @@ class EndToEndTest {
 
     // back navigation is working correctly -> I should consider another UI related test,
     //  I do not think it has anything functionality apart from Ui
+    // no implementing back navigation for now
     @Test
-    fun localItems() {
+    fun localItems() = runBlocking {
         val activityScenario = ActivityScenario.launch(MainActivity::class.java)
 
         onView(withText("LOCAL")).perform(click())
 
         onView(withId(R.id.add_item)).perform(click())
+        onView(withId(R.id.first_name_edit_text)).perform(typeText("firstName"))
+        onView(withId(R.id.last_name_edit_text)).perform(typeText("lastName"))
+        onView(withId(R.id.email_edit_text)).perform(typeText("email1@example.com"))
+        onView(withId(R.id.save)).perform(click())
 
+        onView(withId(R.id.add_item)).perform(click())
+        onView(withId(R.id.first_name_edit_text)).perform(typeText("firstName"))
+        onView(withId(R.id.last_name_edit_text)).perform(typeText("lastName"))
+        onView(withId(R.id.email_edit_text)).perform(typeText("email2@example.com"))
+        onView(withId(R.id.save)).perform(click())
 
-        // TODO:
+        onView(listMatcher().atPosition(0)).check(matches(hasDescendant(withText("email1@example.com"))))
+        onView(listMatcher().atPosition(1)).check(matches(hasDescendant(withText("email2@example.com"))))
+
+        onView(
+            allOf(
+                withId(R.id.edit_image_button),
+                hasSibling(withText("email1@example.com"))
+            )
+        ).perform(
+            click()
+        )
+
+        onView(withId(R.id.email_edit_text)).perform(
+            clearText(),
+            typeText("email-edited1@example.com")
+        )
+        onView(withId(R.id.save)).perform(click())
+
+        onView(listMatcher().atPosition(0)).check(matches(hasDescendant(withText("email-edited1@example.com"))))
+
+        onView(
+            allOf(
+                withId(R.id.delete_image_button),
+                hasSibling(withText("email-edited1@example.com"))
+            )
+        ).perform(
+            click()
+        )
+
+        onView(listMatcher().atPosition(0)).check(matches(not(hasDescendant(withText("email-edited1@example.com")))))
+        onView(listMatcher().atPosition(0)).check(matches(hasDescendant(withText("email2@example.com"))))
 
         activityScenario.close()
-        // insert an item
-        // edit that item
-        // delete that item
     }
 
     @Test
+    @Ignore
     fun remoteItems() {
         mockWebServer.start(8080)
         enqueueResponses()
@@ -103,7 +145,8 @@ class EndToEndTest {
         mockWebServer.enqueueResponse("page3.json")
     }
 
-    private fun listMatcher() = RecyclerViewMatcher(R.id.list_view)
+    // IDK but espresso is unable to find recyclerview with id list_view
+    private fun listMatcher() = RecyclerViewMatcher(R.id.common_list_view)
 
     private fun setupRetrofitClient() {
         val resource = OkHttp3IdlingResource.create("okHttp", okHttpClient)

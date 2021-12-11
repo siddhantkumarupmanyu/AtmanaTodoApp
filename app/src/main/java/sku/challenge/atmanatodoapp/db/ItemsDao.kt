@@ -18,6 +18,6 @@ abstract class ItemsDao {
     abstract suspend fun getItem(id: Int): Item
 
     @Delete
-    abstract fun deleteItem(item: Item)
+    abstract suspend fun deleteItem(item: Item)
 
 }
