@@ -4,13 +4,15 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
@@ -22,9 +24,7 @@ import sku.challenge.atmanatodoapp.R
 import sku.challenge.atmanatodoapp.di.AppModule
 import sku.challenge.atmanatodoapp.fake.FakeRepository
 import sku.challenge.atmanatodoapp.repository.ItemRepository
-import sku.challenge.atmanatodoapp.test_utils.DataBindingIdlingResourceRule
-import sku.challenge.atmanatodoapp.test_utils.launchFragmentInHiltContainer
-import sku.challenge.atmanatodoapp.test_utils.mock
+import sku.challenge.atmanatodoapp.test_utils.*
 
 
 @ExperimentalCoroutinesApi
@@ -50,12 +50,14 @@ class LocalFragmentTest {
         // Populate @Inject fields in test class
         hiltRule.inject()
 
+        repository as FakeRepository
+        repository.items = listOf(DummyData.items(1, 6, 1))
+
         launchFragmentInHiltContainer<LocalFragment> {
             dataBindingIdlingResourceRule.monitorFragment(this)
             Navigation.setViewNavController(requireView(), navController)
         }
     }
-
 
     @Test
     fun shouldNavigateToItemFragment_WhenFABIsClicked() {
@@ -64,17 +66,20 @@ class LocalFragmentTest {
         verify(navController).navigate(eq(LocalFragmentDirections.actionEditItem(-1)))
     }
 
-    // TODO:
     @Test
-    fun shouldNavigateToItemFragment_WhenItemIsToBeEdited(){
-
+    fun shouldNavigateToItemFragment_WhenItemEditIsClicked(): Unit = runBlocking {
+        Thread.sleep(100)
+        onView(listMatcher().atPosition(1)).check(matches(hasDescendant(withText("person2.page1@reqres.in"))))
     }
 
     @Test
     @Ignore
-    fun shouldBeAbleToDeleteItem(){
-
+    fun shouldDeleteItem() {
+        // onView(listMatcher().atPosition(1)).
     }
 
+
+    // IDK but espresso is unable to find recyclerview with id list_view
+    private fun listMatcher() = RecyclerViewMatcher(R.id.common_list_view)
 
 }

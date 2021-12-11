@@ -9,7 +9,7 @@ import sku.challenge.atmanatodoapp.databinding.ListItemBinding
 import sku.challenge.atmanatodoapp.vo.Item
 
 class ListViewAdapter(
-    private val onItemClick: (position: Int) -> Unit
+    private val listener: ItemButtonListener
 ) : ListAdapter<Item, RecyclerView.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -18,7 +18,8 @@ class ListViewAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            listener
         )
     }
 
@@ -27,12 +28,20 @@ class ListViewAdapter(
         (holder as ListItemViewHolder).bind(item)
     }
 
-    class ListItemViewHolder(private val binding: ListItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class ListItemViewHolder(
+        private val binding: ListItemBinding,
+        private val listener: ItemButtonListener
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.listItemCardView.setOnClickListener {
-                onClick()
+            binding.editImageButton.setOnClickListener {
+                // TODO get item position
+                listener.edit(0)
+            }
+
+            binding.editImageButton.setOnClickListener {
+                // TODO get item position
+                listener.delete(0)
             }
         }
 
@@ -42,10 +51,6 @@ class ListViewAdapter(
             binding.nameTextview.text = "${item.firstName} ${item.lastName}"
 
             binding.executePendingBindings()
-        }
-
-        private fun onClick() {
-            TODO()
         }
 
     }
