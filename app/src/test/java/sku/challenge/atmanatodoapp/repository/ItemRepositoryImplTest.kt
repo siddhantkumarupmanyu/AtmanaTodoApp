@@ -25,12 +25,4 @@ class ItemRepositoryImplTest {
         verify(apiService).getPage(2)
     }
 
-    private val items = listOf(
-        Item(1, "george.bluth@reqres.in", "George", "Bluth"),
-        Item(2, "janet.weaver@reqres.in", "Janet", "Weaver"),
-        Item(3, "emma.wong@reqres.in", "Emma", "Wong"),
-    )
-
-    private val fetchedPage = FetchedPage(1, items)
-
 }

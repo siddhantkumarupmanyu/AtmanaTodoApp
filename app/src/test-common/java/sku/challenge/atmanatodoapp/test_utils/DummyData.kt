@@ -19,7 +19,7 @@ object DummyData {
     }
 
     fun fetchedPage(page: Int, startingId: Int, noOfItems: Int): FetchedPage {
-        return FetchedPage(page, items(startingId, page, noOfItems))
+        return FetchedPage(page, items(startingId, noOfItems, page))
     }
 
 }
