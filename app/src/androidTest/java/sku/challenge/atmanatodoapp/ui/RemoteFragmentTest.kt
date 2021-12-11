@@ -73,6 +73,7 @@ class RemoteFragmentTest {
         repository.fetchedPage = DummyData.fetchedPage(2, 7, 6)
 
 
+        onView(listMatcher().atPosition(6)).check(matches(hasDescendant(withText("Load More"))))
 
     }
 
