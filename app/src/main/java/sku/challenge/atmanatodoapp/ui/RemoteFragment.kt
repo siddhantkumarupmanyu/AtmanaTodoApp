@@ -20,6 +20,9 @@ import sku.challenge.atmanatodoapp.vo.Item
 @AndroidEntryPoint
 class RemoteFragment : Fragment() {
 
+
+    // TODO: fix this Fragment
+
     private var _binding: FragmentRemoteBinding? = null
 
     private val binding: FragmentRemoteBinding
@@ -46,9 +49,9 @@ class RemoteFragment : Fragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.commonListView.listView.adapter = ListViewAdapter {
-            // no op for remote data
-        }
+        // binding.commonListView.listView.adapter = ListViewAdapter {
+        //     // no op for remote data
+        // }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -61,12 +64,12 @@ class RemoteFragment : Fragment() {
             }
         }
 
-        remoteViewModel.fetchNextPage()
+        // remoteViewModel.fetchNextPage()
     }
 
     private fun loadNewData(data: List<Item>) {
-        val adapter = binding.commonListView.listView.adapter as ListViewAdapter
-        adapter.submitList(data)
+        // val adapter = binding.commonListView.listView.adapter as ListViewAdapter
+        // adapter.submitList(data)
     }
 
     private fun showLoadingMoreProgressBar() {

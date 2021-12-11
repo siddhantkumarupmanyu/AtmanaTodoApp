@@ -3,6 +3,7 @@ package sku.challenge.atmanatodoapp
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -17,7 +18,6 @@ import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -53,11 +53,18 @@ class EndToEndTest {
         setupRetrofitClient()
     }
 
-    // back navigation is working correctly -> I should consider another UI related,
-    //  I do not think it has anything functionality apart from UI
+    // back navigation is working correctly -> I should consider another UI related test,
+    //  I do not think it has anything functionality apart from Ui
     @Test
-    @Ignore
     fun localItems() {
+        val activityScenario = ActivityScenario.launch(MainActivity::class.java)
+
+        onView(withText("LOCAL")).perform(click())
+
+
+
+
+        activityScenario.close()
         // insert an item
         // edit that item
         // delete that item
