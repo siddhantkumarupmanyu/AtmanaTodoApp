@@ -12,6 +12,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -61,6 +62,18 @@ class LocalFragmentTest {
         onView(withId(R.id.add_item)).perform(click())
 
         verify(navController).navigate(eq(LocalFragmentDirections.actionEditItem(-1)))
+    }
+
+    // TODO:
+    @Test
+    fun shouldNavigateToItemFragment_WhenItemIsToBeEdited(){
+
+    }
+
+    @Test
+    @Ignore
+    fun shouldBeAbleToDeleteItem(){
+
     }
 
 

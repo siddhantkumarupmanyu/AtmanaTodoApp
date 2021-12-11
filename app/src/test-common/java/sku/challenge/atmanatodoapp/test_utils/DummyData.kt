@@ -8,10 +8,10 @@ object DummyData {
     fun items(startingId: Int, noOfItems: Int, page: Int): List<Item> {
         val items = (startingId until (startingId + noOfItems)).map { id: Int ->
             Item(
-                id,
                 "person${id}.page${page}@reqres.in",
                 "Firstname${id}-${page}",
-                "Lastname${id}-${page}"
+                "Lastname${id}-${page}",
+                id
             )
         }
 

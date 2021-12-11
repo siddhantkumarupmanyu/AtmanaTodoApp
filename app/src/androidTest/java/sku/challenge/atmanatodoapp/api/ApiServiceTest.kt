@@ -96,7 +96,7 @@ class ApiServiceTest {
         firstName: String,
         lastName: String
     ) {
-        assertThat(item, `is`(equalTo(Item(id, email, firstName, lastName))))
+        assertThat(item, `is`(equalTo(Item(email, firstName, lastName, id))))
     }
 
 }
