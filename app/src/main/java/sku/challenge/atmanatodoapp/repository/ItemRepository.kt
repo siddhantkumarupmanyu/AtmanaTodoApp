@@ -11,4 +11,8 @@ interface ItemRepository {
     fun getLocalItems(): Flow<List<Item>>
 
     suspend fun getItem(id: Int): Item
+
+    suspend fun saveLocalItem(item: Item)
+
+    suspend fun deleteLocalItem(item: Item)
 }

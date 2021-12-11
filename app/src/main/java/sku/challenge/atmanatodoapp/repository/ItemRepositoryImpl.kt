@@ -26,4 +26,12 @@ class ItemRepositoryImpl(
         return dao.getItem(id)
     }
 
+    override suspend fun saveLocalItem(item: Item) {
+        dao.insertItems(item)
+    }
+
+    override suspend fun deleteLocalItem(item: Item) {
+        dao.deleteItem(item)
+    }
+
 }

@@ -39,4 +39,12 @@ class FakeRepository : ItemRepository {
     override suspend fun getItem(id: Int): Item {
         return item
     }
+
+    override suspend fun saveLocalItem(item: Item) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteLocalItem(item: Item) {
+        TODO("Not yet implemented")
+    }
 }
