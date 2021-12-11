@@ -1,5 +1,7 @@
 
 
+api return same data for page 1 and page 0
+
 let store current FetchedPage in RemoteViewModel only
 
 
