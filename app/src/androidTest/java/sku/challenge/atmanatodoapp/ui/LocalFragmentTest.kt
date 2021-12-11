@@ -66,7 +66,7 @@ class LocalFragmentTest {
     fun shouldNavigateToItemFragment_WhenFABIsClicked() {
         onView(withId(R.id.add_item)).perform(click())
 
-        verify(navController).navigate(eq(LocalFragmentDirections.actionEditItem(-1)))
+        verify(navController).navigate(eq(ContainerFragmentDirections.actionContainerToEditItem(-1)))
     }
 
     @Test
@@ -82,7 +82,7 @@ class LocalFragmentTest {
             click()
         )
 
-        verify(navController).navigate(LocalFragmentDirections.actionEditItem(2))
+        verify(navController).navigate(ContainerFragmentDirections.actionContainerToEditItem(2))
     }
 
     @Test

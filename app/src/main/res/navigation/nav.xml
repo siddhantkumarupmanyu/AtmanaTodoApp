@@ -9,20 +9,20 @@
         android:id="@+id/containerFragment"
         android:name="sku.challenge.atmanatodoapp.ui.ContainerFragment"
         android:label="fragment_container"
-        tools:layout="@layout/fragment_container" />
+        tools:layout="@layout/fragment_container" >
+        <action
+            android:id="@+id/action_container_to_edit_item"
+            app:destination="@id/editItemFragment" />
+    </fragment>
     <fragment
         android:id="@+id/localFragment"
         android:name="sku.challenge.atmanatodoapp.ui.LocalFragment"
         android:label="LocalFragment"
-        tools:layout="@layout/fragment_local">
-        <action
-            android:id="@+id/action_edit_item"
-            app:destination="@id/itemFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_local"/>
     <fragment
-        android:id="@+id/itemFragment"
-        android:name="sku.challenge.atmanatodoapp.ui.ItemFragment"
-        android:label="ItemFragment"
+        android:id="@+id/editItemFragment"
+        android:name="sku.challenge.atmanatodoapp.ui.EditItemFragment"
+        android:label="EditItemFragment"
         tools:layout="@layout/fragment_edit_item">
         <argument
             android:name="id"

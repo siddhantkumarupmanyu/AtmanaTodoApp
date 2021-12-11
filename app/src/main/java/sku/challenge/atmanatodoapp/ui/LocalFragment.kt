@@ -48,7 +48,7 @@ class LocalFragment : Fragment(), ItemButtonListener {
         binding.lifecycleOwner = viewLifecycleOwner
 
         binding.addItem.setOnClickListener {
-            findNavController().navigate(LocalFragmentDirections.actionEditItem(-1))
+            findNavController().navigate(ContainerFragmentDirections.actionContainerToEditItem(-1))
         }
 
         binding.commonListView.listView.adapter = ListViewAdapter(this)
@@ -66,7 +66,7 @@ class LocalFragment : Fragment(), ItemButtonListener {
     override fun edit(position: Int) {
         val adapter = binding.commonListView.listView.adapter as ListViewAdapter
         val id = adapter.currentList[position].id
-        findNavController().navigate(LocalFragmentDirections.actionEditItem(id))
+        findNavController().navigate(ContainerFragmentDirections.actionContainerToEditItem(id))
     }
 
     override fun delete(position: Int) {
