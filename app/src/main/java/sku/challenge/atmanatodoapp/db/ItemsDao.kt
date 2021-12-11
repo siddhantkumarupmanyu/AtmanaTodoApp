@@ -15,7 +15,7 @@ abstract class ItemsDao {
     abstract suspend fun insertItems(vararg item: Item)
 
     @Query("SELECT * FROM item")
-    abstract fun getTracks(): Flow<List<Item>>
+    abstract fun getItems(): Flow<List<Item>>
 
     @Query("SELECT * FROM item WHERE id = :id")
     abstract suspend fun getItem(id: Int): Item

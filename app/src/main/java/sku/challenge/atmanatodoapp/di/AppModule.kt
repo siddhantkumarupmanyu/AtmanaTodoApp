@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import sku.challenge.atmanatodoapp.api.ApiService
+import sku.challenge.atmanatodoapp.db.ItemsDao
 import sku.challenge.atmanatodoapp.repository.ItemRepository
 import sku.challenge.atmanatodoapp.repository.ItemRepositoryImpl
 import javax.inject.Singleton
@@ -17,10 +18,9 @@ object AppModule {
     @Provides
     fun provideRepository(
         service: ApiService,
+        dao: ItemsDao
     ): ItemRepository {
-        return ItemRepositoryImpl(
-            service
-        )
+        return ItemRepositoryImpl(service, dao)
     }
 
 

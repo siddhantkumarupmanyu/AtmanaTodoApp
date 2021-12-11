@@ -27,7 +27,7 @@ class ItemsDaoTest : DbTest() {
 
         itemsDao.insertItems(item1, item2)
 
-        val retrievedItems = itemsDao.getTracks().first()
+        val retrievedItems = itemsDao.getItems().first()
 
         assertThat(retrievedItems, `is`(equalTo(listOf(item1.copy(id = 1), item2.copy(id = 2)))))
     }
