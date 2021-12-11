@@ -63,7 +63,7 @@ class RemoteFragmentTest {
     }
 
     @Test
-    fun loadMoreData_OnReachingEndOfTheList() {
+    fun loadMoreData_WhenClickedOnLoadMore() {
         repository as FakeRepository
 
         onView(listMatcher().atPosition(1)).check(matches(hasDescendant(withText("Firstname2-1 Lastname2-1"))))
@@ -71,6 +71,7 @@ class RemoteFragmentTest {
         repository.pageNo = 2
         repository.delayBeforeReturningResult = 10L
         repository.fetchedPage = DummyData.fetchedPage(2, 7, 6)
+
 
 
     }
