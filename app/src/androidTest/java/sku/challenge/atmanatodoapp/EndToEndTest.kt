@@ -56,9 +56,6 @@ class EndToEndTest {
         setupRetrofitClient()
     }
 
-    // back navigation is working correctly -> I should consider another UI related test,
-    //  I do not think it has anything functionality apart from Ui
-    // no implementing back navigation for now
     @Test
     fun localItems() = runBlocking {
         val activityScenario = ActivityScenario.launch(MainActivity::class.java)

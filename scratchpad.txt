@@ -1,7 +1,9 @@
 
 not adding code coverage. Setting Jacoco is pain in a**
 
-structure ui Fragment in packages
+want to add back navigation, action bars support
+    - like showing back arrow in action bar when EditItemText is opened
+    - but it's a bit complicated to test, so skipping for now
 
 // LOCAL
 
