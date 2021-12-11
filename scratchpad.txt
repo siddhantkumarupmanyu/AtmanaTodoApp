@@ -1,5 +1,11 @@
 
 
+there are two ways to show no data is available
+    - one is to fetch the next page before hand and then show appropriately
+    - second is to fetch the next page on demand <- going with this one
+        - so it's something like this
+            - user clicks on LoadMore -> if data is available we load it, if it's not we just say no more data available
+
 Not Going to add ProgressBar, this case is getting much complkicated and deadline is less
     - as challenge says just adding a load more textview
         - will load new data when clicked on it.

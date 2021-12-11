@@ -107,7 +107,8 @@ class RemoteViewModelTest {
         yield()
         delay(20L)
 
-        val items = (viewModel.items.first() as RemoteViewModel.FetchedPageResult.Success).data
+        val items =
+            (viewModel.items.first() as RemoteViewModel.FetchedPageResult.NoMoreDataAvailable).allData
         assertThat(items, `is`(emptyList()))
 
         viewModel.fetchNextPage()
