@@ -15,10 +15,10 @@ import org.hamcrest.core.IsEqual.equalTo
 import org.hamcrest.core.IsInstanceOf
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import sku.challenge.atmanatodoapp.fake.FakeRepository
 import sku.challenge.atmanatodoapp.test_utils.DummyData
+import sku.challenge.atmanatodoapp.vo.FetchedPage
 
 @ExperimentalCoroutinesApi
 class RemoteViewModelTest {
@@ -71,8 +71,25 @@ class RemoteViewModelTest {
     }
 
     @Test
-    @Ignore
-    fun shouldNotifyNoDataIsAvailable() {
+    fun shouldNotFetchNextPage_WhenPreviousPageHasNoData() = runTest {
+        fakeRepository.delayBeforeReturningResult = 10L
+        fakeRepository.pageNo = 1
+        fakeRepository.fetchedPage = FetchedPage(1, emptyList())
 
+        viewModel.fetchNextPage()
+        yield()
+        delay(20L)
+
+        val items = (viewModel.items.first() as RemoteViewModel.FetchedPageResult.Success).data
+        assertThat(items, `is`(emptyList()))
+
+        viewModel.fetchNextPage()
+        yield()
+
+        assertThat(
+            "should be called only once, for page 1",
+            fakeRepository.fetchRemotePageCalledTimes,
+            `is`(equalTo(1))
+        )
     }
 }

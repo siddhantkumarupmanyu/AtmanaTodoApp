@@ -12,10 +12,15 @@ class FakeRepository : ItemRepository {
     var delayBeforeReturningResult: Long = 0
     var fetchedPage: FetchedPage = FetchedPage(0, emptyList())
 
+    var fetchRemotePageCalledTimes: Int = 0
+        private set
+
     override suspend fun fetchRemotePage(pageNo: Int): FetchedPage {
         assertThat(pageNo, `is`(equalTo(this.pageNo)))
 
         delay(delayBeforeReturningResult)
+
+        fetchRemotePageCalledTimes += 1
 
         return fetchedPage
     }

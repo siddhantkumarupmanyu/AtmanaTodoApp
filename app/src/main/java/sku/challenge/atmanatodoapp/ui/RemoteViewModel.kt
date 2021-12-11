@@ -23,12 +23,18 @@ class RemoteViewModel(
 
     fun fetchNextPage() {
         viewModelScope.launch {
+            if (isCurrentPageWithEmptyData()) {
+                return@launch
+            }
             _items.value = FetchedPageResult.Loading
             val nextPage = itemRepository.fetchRemotePage(currentPage.page + 1)
             currentPage = nextPage
             _items.value = FetchedPageResult.Success(currentPage.data)
         }
     }
+
+    private fun isCurrentPageWithEmptyData() =
+        (currentPage != FetchedPage.NO_PAGE) && currentPage.data.isEmpty()
 
     sealed class FetchedPageResult {
         class Success(val data: List<Item>) : FetchedPageResult()
