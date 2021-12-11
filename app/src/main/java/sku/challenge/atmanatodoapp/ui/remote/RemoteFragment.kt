@@ -1,4 +1,4 @@
-package sku.challenge.atmanatodoapp.ui
+package sku.challenge.atmanatodoapp.ui.remote
 
 import android.os.Bundle
 import android.view.LayoutInflater

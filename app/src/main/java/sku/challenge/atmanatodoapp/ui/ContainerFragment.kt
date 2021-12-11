@@ -11,6 +11,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import sku.challenge.atmanatodoapp.R
 import sku.challenge.atmanatodoapp.databinding.FragmentContainerBinding
+import sku.challenge.atmanatodoapp.ui.local.LocalFragment
+import sku.challenge.atmanatodoapp.ui.remote.RemoteFragment
 
 
 const val FRAGMENTS_COUNT = 2

@@ -18,6 +18,7 @@ import org.junit.Before
 import org.junit.Test
 import sku.challenge.atmanatodoapp.fake.FakeRepository
 import sku.challenge.atmanatodoapp.test_utils.DummyData
+import sku.challenge.atmanatodoapp.ui.remote.RemoteViewModel
 import sku.challenge.atmanatodoapp.vo.FetchedPage
 
 @ExperimentalCoroutinesApi

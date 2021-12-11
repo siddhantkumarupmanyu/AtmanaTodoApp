@@ -24,6 +24,7 @@ import sku.challenge.atmanatodoapp.test_utils.DataBindingIdlingResourceRule
 import sku.challenge.atmanatodoapp.test_utils.DummyData
 import sku.challenge.atmanatodoapp.test_utils.RecyclerViewMatcher
 import sku.challenge.atmanatodoapp.test_utils.launchFragmentInHiltContainer
+import sku.challenge.atmanatodoapp.ui.remote.RemoteFragment
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)

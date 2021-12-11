@@ -16,12 +16,12 @@
     </fragment>
     <fragment
         android:id="@+id/localFragment"
-        android:name="sku.challenge.atmanatodoapp.ui.LocalFragment"
+        android:name="sku.challenge.atmanatodoapp.ui.local.LocalFragment"
         android:label="LocalFragment"
         tools:layout="@layout/fragment_local"/>
     <fragment
         android:id="@+id/editItemFragment"
-        android:name="sku.challenge.atmanatodoapp.ui.EditItemFragment"
+        android:name="sku.challenge.atmanatodoapp.ui.edit_item.EditItemFragment"
         android:label="EditItemFragment"
         tools:layout="@layout/fragment_edit_item">
         <argument
