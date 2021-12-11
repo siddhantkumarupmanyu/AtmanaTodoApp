@@ -64,7 +64,9 @@ class LocalFragment : Fragment(), ItemButtonListener {
     }
 
     override fun edit(position: Int) {
-        TODO("Not yet implemented")
+        val adapter = binding.commonListView.listView.adapter as ListViewAdapter
+        val id = adapter.currentList[position].id
+        findNavController().navigate(LocalFragmentDirections.actionEditItem(id))
     }
 
     override fun delete(position: Int) {

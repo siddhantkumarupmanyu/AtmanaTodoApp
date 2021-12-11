@@ -13,6 +13,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.core.AllOf.allOf
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
@@ -70,6 +71,16 @@ class LocalFragmentTest {
     fun shouldNavigateToItemFragment_WhenItemEditIsClicked(): Unit = runBlocking {
         Thread.sleep(100)
         onView(listMatcher().atPosition(1)).check(matches(hasDescendant(withText("person2.page1@reqres.in"))))
+        onView(
+            allOf(
+                withId(R.id.edit_image_button),
+                hasSibling(withText("person2.page1@reqres.in"))
+            )
+        ).perform(
+            click()
+        )
+
+        verify(navController).navigate(LocalFragmentDirections.actionEditItem(2))
     }
 
     @Test

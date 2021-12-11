@@ -35,11 +35,11 @@ class ListViewAdapter(
 
         init {
             binding.editImageButton.setOnClickListener {
-                // TODO get item position
-                listener.edit(0)
+                val position = adapterPosition
+                listener.edit(position)
             }
 
-            binding.editImageButton.setOnClickListener {
+            binding.deleteImageButton.setOnClickListener {
                 // TODO get item position
                 listener.delete(0)
             }
