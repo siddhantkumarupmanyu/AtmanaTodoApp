@@ -14,39 +14,45 @@ import javax.inject.Inject
 class EditItemViewModel @Inject constructor(
     private val repository: ItemRepository
 ) : ViewModel() {
-    private val _item = MutableStateFlow(Item("", "", "", -1))
-
-    val item: StateFlow<Item> = _item
-
     // consider making it only for one time consumption
     // follow/implement one time event pattern
 
     // YAGNI for now and just making it a save event rather than generic event
     // Is considering to add test so it is only consumed once
 
-    private val _saveEvent: MutableStateFlow<Any> = MutableStateFlow(Any())
-    val saveEvent: StateFlow<Any> = _saveEvent
+    private val _event: MutableStateFlow<Event> = MutableStateFlow(Event.InitialFlowEvent)
+    val event: StateFlow<Event> = _event
+
+    // this code Item("", "", "", 0) is repeated so many times
+    // i should consider applying null object pattern i.e. making static EMPTY_ITEM in Item Class
+    private var item = Item("", "", "", 0)
 
     fun loadItem(id: Int) {
+        // fail fast;
+        assert((id != -1) || (id != 0))
+
         viewModelScope.launch {
-            _item.value = repository.getItem(id)
+            item = repository.getItem(id)
+            _event.value = Event.ItemEvent(item)
         }
     }
 
     fun saveItem(email: String, firstName: String, lastName: String) {
         viewModelScope.launch {
             repository.saveLocalItem(
-                item.value.copy(
+                item.copy(
                     email = email,
                     firstName = firstName,
                     lastName = lastName
                 )
             )
-
-            _saveEvent.value = SaveEvent()
+            _event.value = Event.SaveEvent
         }
     }
 
-    class SaveEvent
-
+    sealed class Event {
+        data class ItemEvent(val item: Item) : Event()
+        object SaveEvent : Event()
+        object InitialFlowEvent : Event()
+    }
 }

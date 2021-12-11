@@ -48,29 +48,59 @@ class EditItemViewModelTest {
         viewModel.loadItem(1)
         yield()
 
-        assertThat(viewModel.item.first(), `is`(equalTo(item)))
+        val event = viewModel.event.first()
+        assertThat(
+            event,
+            IsInstanceOf(EditItemViewModel.Event.ItemEvent::class.java)
+        )
+        event as EditItemViewModel.Event.ItemEvent
+        assertThat(
+            event.item,
+            `is`(equalTo(item))
+        )
+
         verify(repository).getItem(1)
     }
 
-
     @Test
-    fun saveItem() = runTest {
-        viewModel.loadItem(1)
-        yield()
-
+    fun saveNewItem() = runTest {
         viewModel.saveItem("newEmail", "newFirstName", "newLastName")
         yield()
 
         assertThat(
-            viewModel.saveEvent.first(),
-            IsInstanceOf(EditItemViewModel.SaveEvent::class.java)
+            viewModel.event.first(),
+            IsInstanceOf(EditItemViewModel.Event.SaveEvent::class.java)
+        )
+
+        verify(repository).saveLocalItem(
+            Item(
+                email = "newEmail",
+                firstName = "newFirstName",
+                lastName = "newLastName",
+                id = 0
+            )
+        )
+    }
+
+
+    @Test
+    fun editItem() = runTest {
+        viewModel.loadItem(1)
+        yield()
+
+        viewModel.saveItem("editedEmail", "editedFirstName", "editedLastName")
+        yield()
+
+        assertThat(
+            viewModel.event.first(),
+            IsInstanceOf(EditItemViewModel.Event.SaveEvent::class.java)
         )
 
         verify(repository).saveLocalItem(
             item.copy(
-                email = "newEmail",
-                firstName = "newFirstName",
-                lastName = "newLastName"
+                email = "editedEmail",
+                firstName = "editedFirstName",
+                lastName = "editedLastName"
             )
         )
     }

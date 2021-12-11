@@ -3,7 +3,6 @@
 // LOCAL
 
 
-
 // REMOTE (will complete it after Local)
 
 there are two ways to show no data is available
