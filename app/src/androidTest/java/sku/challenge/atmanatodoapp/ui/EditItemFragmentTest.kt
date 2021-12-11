@@ -3,8 +3,7 @@ package sku.challenge.atmanatodoapp.ui
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -82,14 +81,25 @@ class EditItemFragmentTest {
     }
 
     @Test
-    fun editItem() {
-        // val args =
-        // launchFragmentInHiltContainer<EditItemFragment>() {
-        //     dataBindingIdlingResourceRule.monitorFragment(this)
-        //     Navigation.setViewNavController(requireView(), navController)
-        // }
+    fun editItem() = runBlocking {
+        val args = EditItemFragmentArgs(1).toBundle()
+        launchFragmentInHiltContainer<EditItemFragment>(fragmentArgs = args) {
+            dataBindingIdlingResourceRule.monitorFragment(this)
+            Navigation.setViewNavController(requireView(), navController)
+        }
 
+        onView(withId(R.id.first_name_edit_text)).check(matches(withText(item.firstName)))
+        onView(withId(R.id.last_name_edit_text)).check(matches(withText(item.lastName)))
+        onView(withId(R.id.email_edit_text)).check(matches(withText(item.email)))
 
+        onView(withId(R.id.first_name_edit_text)).perform(clearText(), typeText("editFirstName"))
+        onView(withId(R.id.last_name_edit_text)).perform(clearText(), typeText("editLastName"))
+        onView(withId(R.id.email_edit_text)).perform(clearText(), typeText("editEmail"))
+
+        onView(withId(R.id.save)).perform(click())
+
+        verify(navController).navigateUp()
+        verify(repository).saveLocalItem(Item("editEmail", "editFirstName", "editLastName", 1))
     }
 
 }
