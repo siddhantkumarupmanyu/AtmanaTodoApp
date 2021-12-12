@@ -3,7 +3,6 @@ package sku.challenge.atmanatodoapp.ui.remote
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -25,34 +24,15 @@ class RemoteViewModel @Inject constructor(
 
     val items: StateFlow<FetchedPageResult> = _items
 
-
-    private val queue = ArrayDeque<Job>(2)
-
     private val mutex = Mutex()
 
     fun fetchNextPage() {
-        val job = viewModelScope.launch {
-
-            // unfortunately mutext code is untested
+        viewModelScope.launch {
             mutex.lock()
 
             if (!isMoreDataAvailable()) {
                 return@launch
             }
-
-            // I should handle the case when this is called multiple times right
-
-            // println("before job check")
-            // println("launched")
-
-            // unfortunately this code is untested
-            // val firstJob = queue.firstOrNull()
-            // if ((firstJob != null) && firstJob.isActive) {
-            //     firstJob.join()
-            //     queue.removeFirst()
-            // }
-
-            // println("after job check")
 
             val oldItems = (items.value as FetchedPageResult.Success).data
 
@@ -70,8 +50,6 @@ class RemoteViewModel @Inject constructor(
 
             mutex.unlock()
         }
-
-        queue.add(job)
     }
 
     private fun isMoreDataAvailable() =
