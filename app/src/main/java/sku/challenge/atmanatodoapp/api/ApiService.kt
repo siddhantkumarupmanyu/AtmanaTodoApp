@@ -6,7 +6,7 @@ import sku.challenge.atmanatodoapp.vo.FetchedPage
 
 interface ApiService {
 
-    @GET("/users")
+    @GET("users")
     suspend fun getPage(@Query("page") pageNo: Int): FetchedPage
 
 }

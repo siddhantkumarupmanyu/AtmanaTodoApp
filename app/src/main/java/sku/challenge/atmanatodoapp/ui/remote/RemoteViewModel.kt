@@ -3,6 +3,7 @@ package sku.challenge.atmanatodoapp.ui.remote
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,7 +17,6 @@ class RemoteViewModel @Inject constructor(
     private val itemRepository: ItemRepository
 ) : ViewModel() {
 
-
     private var currentPage = FetchedPage.NO_PAGE
 
     private val _items =
@@ -24,11 +24,29 @@ class RemoteViewModel @Inject constructor(
 
     val items: StateFlow<FetchedPageResult> = _items
 
+
+    private val queue = ArrayDeque<Job>(2)
+
     fun fetchNextPage() {
-        viewModelScope.launch {
+        val job = viewModelScope.launch {
             if (!isMoreDataAvailable()) {
                 return@launch
             }
+
+            // I should handle the case when this is called multiple times right
+
+            // println("before job check")
+            // println("launched")
+
+            // unfortunately this code is untested
+            // val firstJob = queue.firstOrNull()
+            // if ((firstJob != null) && firstJob.isActive) {
+            //     firstJob.join()
+            //     queue.removeFirst()
+            // }
+
+            // println("after job check")
+
             val oldItems = (items.value as FetchedPageResult.Success).data
 
             _items.value = FetchedPageResult.Loading
@@ -43,6 +61,8 @@ class RemoteViewModel @Inject constructor(
                 _items.value = FetchedPageResult.Success(combinedItems)
             }
         }
+
+        queue.add(job)
     }
 
     private fun isMoreDataAvailable() =
