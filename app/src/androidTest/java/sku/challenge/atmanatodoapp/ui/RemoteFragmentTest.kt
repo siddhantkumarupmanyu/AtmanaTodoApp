@@ -2,8 +2,7 @@ package sku.challenge.atmanatodoapp.ui
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -11,6 +10,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.core.IsNot.not
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
@@ -31,8 +31,6 @@ import sku.challenge.atmanatodoapp.ui.remote.RemoteFragment
 @UninstallModules(AppModule::class)
 @HiltAndroidTest
 class RemoteFragmentTest {
-
-    // TODO
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -64,10 +62,14 @@ class RemoteFragmentTest {
     fun itemsAreLoaded_WhenFragmentIsSetUp(): Unit = runBlocking {
         onView(listMatcher().atPosition(1)).check(matches(hasDescendant(withText("Firstname2-1 Lastname2-1"))))
 
+        onView(withId(R.id.progress_indicator)).check(matches(not(isDisplayed())))
+
+        // TODO:
         // assert edit and delete items are not visible
     }
 
     @Test
+    @Ignore
     fun loadMoreData_WhenClickedOnLoadMore() {
         repository as FakeRepository
 

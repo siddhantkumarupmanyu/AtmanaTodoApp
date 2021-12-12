@@ -19,8 +19,6 @@ class RemoteViewModel @Inject constructor(
 
     private var currentPage = FetchedPage.NO_PAGE
 
-    private var combinedItems = emptyList<Item>()
-
     private val _items =
         MutableStateFlow<FetchedPageResult>(FetchedPageResult.Success(currentPage.data))
 
@@ -28,24 +26,27 @@ class RemoteViewModel @Inject constructor(
 
     fun fetchNextPage() {
         viewModelScope.launch {
-            if (isCurrentPageWithEmptyData()) {
+            if (!isMoreDataAvailable()) {
                 return@launch
             }
+            val oldItems = (items.value as FetchedPageResult.Success).data
+
             _items.value = FetchedPageResult.Loading
+
             val nextPage = itemRepository.fetchRemotePage(currentPage.page + 1)
             currentPage = nextPage
-            
+
             if (nextPage.data.isEmpty()) {
-                _items.value = FetchedPageResult.NoMoreDataAvailable(combinedItems)
+                _items.value = FetchedPageResult.NoMoreDataAvailable(oldItems)
             } else {
-                combinedItems = combinedItems + nextPage.data
+                val combinedItems = oldItems + nextPage.data
                 _items.value = FetchedPageResult.Success(combinedItems)
             }
         }
     }
 
-    private fun isCurrentPageWithEmptyData() =
-        (currentPage != FetchedPage.NO_PAGE) && currentPage.data.isEmpty()
+    private fun isMoreDataAvailable() =
+        items.value !is FetchedPageResult.NoMoreDataAvailable
 
     sealed class FetchedPageResult {
         class Success(val data: List<Item>) : FetchedPageResult()
