@@ -110,15 +110,8 @@ class RemoteFragmentTest {
     @Test
     @Ignore
     fun loadMoreData_WhenSwipedBeforePreviousDataIsLoaded(): Unit = runBlocking {
-        // I know whats happening
-        // when we scroll fast enough and previous data is not loaded
-        // items.value as FetchedPageResult.Success fails in RemoteViewModel
-        // but IDK how reproduce it here, in test
-        // I am just skipping this for now
-
         // how to reproduce
         // open the app -> swipe firmly -> crash
-        // IDK why it crashes; I have added code for above case though
 
         // found the cause it's due to synchronization
         // i think locking have fixed the problem
