@@ -101,22 +101,26 @@ class RemoteFragment : Fragment() {
         val adapter = binding.commonListView.listView.adapter as ListViewAdapter
         adapter.submitList(data)
 
-        // hideProgressBar()
+        hideLoadMoreProgressBar()
     }
 
     private fun showNoDataSnackBar() {
-        Snackbar.make(binding.root, getString(R.string.no_more_data_available), Snackbar.LENGTH_SHORT)
+        Snackbar.make(
+            binding.root,
+            getString(R.string.no_more_data_available),
+            Snackbar.LENGTH_SHORT
+        )
             .show()
     }
 
     // this function is not tested
-    private fun hideProgressBar() {
-        TODO("Not yet implemented")
+    private fun hideLoadMoreProgressBar() {
+        binding.progressIndicator.visibility = View.GONE
     }
 
     // this function is not tested
     private fun showLoadingMoreProgressBar() {
-        // TODO("Not yet implemented")
+        binding.progressIndicator.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
