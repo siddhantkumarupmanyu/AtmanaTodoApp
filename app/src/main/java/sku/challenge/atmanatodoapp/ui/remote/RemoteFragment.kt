@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -58,7 +59,14 @@ class RemoteFragment : Fragment() {
                 remoteViewModel.items.collect { result ->
                     when (result) {
                         is RemoteViewModel.FetchedPageResult.Loading -> showLoadingMoreProgressBar()
-                        is RemoteViewModel.FetchedPageResult.NoMoreDataAvailable -> showNoDataSnackBar()
+                        is RemoteViewModel.FetchedPageResult.NoMoreDataAvailable -> {
+                            // no testing setNewData call
+                            // IDK how recyclerView handles configuration changes
+                            // just so that we do not loose data after configuration change
+                            setNewData(result.allData)
+
+                            showNoDataSnackBar()
+                        }
                         is RemoteViewModel.FetchedPageResult.Success -> setNewData(result.data)
                     }
                 }
@@ -92,17 +100,21 @@ class RemoteFragment : Fragment() {
     private fun setNewData(data: List<Item>) {
         val adapter = binding.commonListView.listView.adapter as ListViewAdapter
         adapter.submitList(data)
+
         // hideProgressBar()
     }
 
+    private fun showNoDataSnackBar() {
+        Snackbar.make(binding.root, getString(R.string.no_more_data_available), Snackbar.LENGTH_SHORT)
+            .show()
+    }
+
+    // this function is not tested
     private fun hideProgressBar() {
         TODO("Not yet implemented")
     }
 
-    private fun showNoDataSnackBar() {
-        TODO("Not yet implemented")
-    }
-
+    // this function is not tested
     private fun showLoadingMoreProgressBar() {
         // TODO("Not yet implemented")
     }

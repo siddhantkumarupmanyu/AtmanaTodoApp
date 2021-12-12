@@ -20,7 +20,6 @@ import org.hamcrest.Matcher
 import org.hamcrest.core.AllOf.allOf
 import org.hamcrest.core.IsNot.not
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,6 +30,7 @@ import sku.challenge.atmanatodoapp.di.AppModule
 import sku.challenge.atmanatodoapp.repository.ItemRepository
 import sku.challenge.atmanatodoapp.test_utils.*
 import sku.challenge.atmanatodoapp.ui.remote.RemoteFragment
+import sku.challenge.atmanatodoapp.vo.FetchedPage
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -56,6 +56,7 @@ class RemoteFragmentTest {
 
         `when`(repository.fetchRemotePage(1)).thenReturn(DummyData.fetchedPage(1, 1, 20))
         `when`(repository.fetchRemotePage(2)).thenReturn(DummyData.fetchedPage(2, 20, 20))
+        `when`(repository.fetchRemotePage(3)).thenReturn(FetchedPage(3, emptyList()))
 
         launchFragmentInHiltContainer<RemoteFragment> {
             dataBindingIdlingResourceRule.monitorFragment(this)
@@ -106,8 +107,17 @@ class RemoteFragmentTest {
     }
 
     @Test
-    fun showSnack_WhenNoDataIsFound() {
+    fun showSnack_WhenNoDataIsFound(): Unit = runBlocking {
+        onView(withId(R.id.common_list_view)).perform(ScrollAction())
+        delay(100)
+        onView(withId(R.id.common_list_view)).perform(ScrollAction())
+        delay(200)
 
+        onView(withText(R.string.no_more_data_available)).check(matches(isDisplayed()))
+
+        verify(repository).fetchRemotePage(1)
+        verify(repository).fetchRemotePage(2)
+        verify(repository).fetchRemotePage(3)
     }
 
 
