@@ -119,6 +119,11 @@ class RemoteFragmentTest {
         // how to reproduce
         // open the app -> swipe firmly -> crash
         // IDK why it crashes; I have added code for above case though
+
+        // found the cause it's due to synchronization
+        // i think locking have fixed the problem
+
+        // testing this case in viewModel
     }
 
     @Test

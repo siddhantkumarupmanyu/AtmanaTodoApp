@@ -7,6 +7,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import sku.challenge.atmanatodoapp.repository.ItemRepository
 import sku.challenge.atmanatodoapp.vo.FetchedPage
 import sku.challenge.atmanatodoapp.vo.Item
@@ -27,8 +28,14 @@ class RemoteViewModel @Inject constructor(
 
     private val queue = ArrayDeque<Job>(2)
 
+    private val mutex = Mutex()
+
     fun fetchNextPage() {
         val job = viewModelScope.launch {
+
+            // unfortunately mutext code is untested
+            mutex.lock()
+
             if (!isMoreDataAvailable()) {
                 return@launch
             }
@@ -60,6 +67,8 @@ class RemoteViewModel @Inject constructor(
                 val combinedItems = oldItems + nextPage.data
                 _items.value = FetchedPageResult.Success(combinedItems)
             }
+
+            mutex.unlock()
         }
 
         queue.add(job)
