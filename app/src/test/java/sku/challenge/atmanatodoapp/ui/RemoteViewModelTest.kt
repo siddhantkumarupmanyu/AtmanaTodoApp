@@ -121,4 +121,32 @@ class RemoteViewModelTest {
             `is`(equalTo(1))
         )
     }
+
+    @Test
+    fun fetchRemotePageShowBeSynchronized() = runTest {
+        // i can't thing of a better name for this test right now
+
+        fakeRepository.delayBeforeReturningResult = 10L
+        fakeRepository.pageNo = 1
+        fakeRepository.fetchedPage = DummyData.fetchedPage(1, 1, 6)
+        fakeRepository.assertPage = false
+
+        viewModel.fetchNextPage()
+        yield()
+        assertThat(
+            viewModel.items.first(),
+            IsInstanceOf(RemoteViewModel.FetchedPageResult.Loading::class.java)
+        )
+
+        viewModel.fetchNextPage()
+        viewModel.fetchNextPage()
+        viewModel.fetchNextPage()
+
+        // virtual delay so it's run after all the fetchNextPage
+        delay(100L)
+        assertThat(
+            viewModel.items.first(),
+            IsInstanceOf(RemoteViewModel.FetchedPageResult.Success::class.java)
+        )
+    }
 }
