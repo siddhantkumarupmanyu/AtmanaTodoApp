@@ -10,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -64,6 +66,27 @@ class RemoteFragment : Fragment() {
         }
 
         remoteViewModel.fetchNextPage()
+
+        addEndScrollListenerOnRecyclerView()
+    }
+
+    private fun addEndScrollListenerOnRecyclerView() {
+        binding.commonListView.listView.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                // https://stackoverflow.com/a/36128493
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val pastVisibleItemCount = layoutManager.findFirstVisibleItemPosition()
+
+                if (pastVisibleItemCount + visibleItemCount >= totalItemCount) {
+                    remoteViewModel.fetchNextPage()
+                }
+            }
+        })
     }
 
     private fun setNewData(data: List<Item>) {

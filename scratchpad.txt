@@ -1,4 +1,10 @@
 
+
+IDK but it seems weird like I am relying on viewModel to show progress bar in remoteFragment,
+    - but I can just call the show progress bar in the view after calling viewModel.fetchNextPage()
+    - I am not sure?? Which class, view or viewModel should be responsible for triggering progressBar to show
+    - for now not making any code changes
+
 not adding code coverage. Setting Jacoco is pain in a**
 
 want to add back navigation, action bars support
