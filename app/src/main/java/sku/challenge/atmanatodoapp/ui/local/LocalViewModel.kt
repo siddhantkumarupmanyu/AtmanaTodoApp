@@ -1,4 +1,4 @@
-package sku.challenge.atmanatodoapp.ui
+package sku.challenge.atmanatodoapp.ui.local
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

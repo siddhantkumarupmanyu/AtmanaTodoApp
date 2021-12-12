@@ -12,6 +12,8 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
@@ -19,8 +21,8 @@ import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.AllOf.allOf
 import org.hamcrest.core.IsNot.not
+import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,6 +31,7 @@ import sku.challenge.atmanatodoapp.di.ConstantsModule
 import sku.challenge.atmanatodoapp.test_utils.OkHttp3IdlingResource
 import sku.challenge.atmanatodoapp.test_utils.RecyclerViewMatcher
 import sku.challenge.atmanatodoapp.test_utils.enqueueResponse
+import sku.challenge.atmanatodoapp.ui.RemoteFragmentTest
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -54,11 +57,16 @@ class EndToEndTest {
         hiltRule.inject()
 
         setupRetrofitClient()
+
+        mockWebServer.start(8080)
+        enqueueResponses()
     }
 
-    // back navigation is working correctly -> I should consider another UI related test,
-    //  I do not think it has anything functionality apart from Ui
-    // no implementing back navigation for now
+    @After
+    fun tearDown() {
+        mockWebServer.shutdown()
+    }
+
     @Test
     fun localItems() = runBlocking {
         val activityScenario = ActivityScenario.launch(MainActivity::class.java)
@@ -112,24 +120,22 @@ class EndToEndTest {
         activityScenario.close()
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    @Ignore
-    fun remoteItems() {
-        mockWebServer.start(8080)
-        enqueueResponses()
-
+    fun remoteItems() = runBlocking {
         val activityScenario = ActivityScenario.launch(MainActivity::class.java)
-
-        // load the first page
         assertRequest("/users?page=1")
 
         Thread.sleep(100)
-
         onView(listMatcher().atPosition(1)).check(matches(hasDescendant(withText("Janet Weaver"))))
 
-        // test pagination
+        onView(withId(R.id.common_list_view)).perform(RemoteFragmentTest.ScrollAction())
+        delay(200)
+        assertRequest("/users?page=2")
+        onView(withId(R.id.common_list_view)).perform(RemoteFragmentTest.ScrollAction())
+        assertRequest("/users?page=3")
 
-        // no data available
+        onView(withText(R.string.no_more_data_available)).check(matches(isDisplayed()))
 
         activityScenario.close()
     }

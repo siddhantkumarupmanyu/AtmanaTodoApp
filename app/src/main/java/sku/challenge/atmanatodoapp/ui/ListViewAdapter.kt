@@ -1,6 +1,7 @@
 package sku.challenge.atmanatodoapp.ui
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -43,6 +44,9 @@ class ListViewAdapter(
                 val position = adapterPosition
                 listener.delete(position)
             }
+            if (isRemoteList()) {
+                hideImageButtons()
+            }
         }
 
         fun bind(item: Item) {
@@ -52,6 +56,13 @@ class ListViewAdapter(
 
             binding.executePendingBindings()
         }
+
+        private fun hideImageButtons() {
+            binding.editImageButton.visibility = View.GONE
+            binding.deleteImageButton.visibility = View.GONE
+        }
+
+        private fun isRemoteList() = listener == ItemButtonListener.NULL_ITEM_BUTTON_LISTENER
 
     }
 
