@@ -60,7 +60,7 @@ class RemoteFragment : Fragment() {
                     when (result) {
                         is RemoteViewModel.FetchedPageResult.Loading -> showLoadingMoreProgressBar()
                         is RemoteViewModel.FetchedPageResult.NoMoreDataAvailable -> {
-                            // no testing setNewData call
+                            // not testing setNewData call
                             // IDK how recyclerView handles configuration changes
                             // just so that we do not loose data after configuration change
                             setNewData(result.allData)
@@ -105,12 +105,16 @@ class RemoteFragment : Fragment() {
     }
 
     private fun showNoDataSnackBar() {
-        Snackbar.make(
-            binding.root,
-            getString(R.string.no_more_data_available),
-            Snackbar.LENGTH_SHORT
-        )
-            .show()
+        // just forgot about this
+        // https://stackoverflow.com/a/48893125
+        if (this.isVisible) {
+            Snackbar.make(
+                binding.root,
+                getString(R.string.no_more_data_available),
+                Snackbar.LENGTH_SHORT
+            )
+                .show()
+        }
     }
 
     // this function is not tested
