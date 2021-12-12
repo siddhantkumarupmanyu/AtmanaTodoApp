@@ -10,6 +10,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.core.AllOf.allOf
 import org.hamcrest.core.IsNot.not
 import org.junit.Before
 import org.junit.Ignore
@@ -64,8 +65,19 @@ class RemoteFragmentTest {
 
         onView(withId(R.id.progress_indicator)).check(matches(not(isDisplayed())))
 
-        // TODO:
-        // assert edit and delete items are not visible
+        onView(
+            allOf(
+                withId(R.id.edit_image_button),
+                hasSibling(withText("person2.page1@reqres.in"))
+            )
+        ).check(matches(not(isDisplayed())))
+
+        onView(
+            allOf(
+                withId(R.id.delete_image_button),
+                hasSibling(withText("person2.page1@reqres.in"))
+            )
+        ).check(matches(not(isDisplayed())))
     }
 
     @Test

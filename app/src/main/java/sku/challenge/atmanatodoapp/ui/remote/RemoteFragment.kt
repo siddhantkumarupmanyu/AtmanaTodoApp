@@ -7,7 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import sku.challenge.atmanatodoapp.R
 import sku.challenge.atmanatodoapp.databinding.FragmentRemoteBinding
 import sku.challenge.atmanatodoapp.ui.ItemButtonListener
@@ -16,9 +21,6 @@ import sku.challenge.atmanatodoapp.vo.Item
 
 @AndroidEntryPoint
 class RemoteFragment : Fragment() {
-
-
-    // TODO: fix this Fragment
 
     private var _binding: FragmentRemoteBinding? = null
 
@@ -49,23 +51,33 @@ class RemoteFragment : Fragment() {
         binding.commonListView.listView.adapter =
             ListViewAdapter(ItemButtonListener.NULL_ITEM_BUTTON_LISTENER)
 
-        // lifecycleScope.launch {
-        //     repeatOnLifecycle(Lifecycle.State.STARTED) {
-        //         remoteViewModel.items.collect { result ->
-        //             when (result) {
-        //                 is RemoteViewModel.FetchedPageResult.Success -> loadNewData(result.data)
-        //                 is RemoteViewModel.FetchedPageResult.Loading -> showLoadingMoreProgressBar()
-        //             }
-        //         }
-        //     }
-        // }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                remoteViewModel.items.collect { result ->
+                    when (result) {
+                        is RemoteViewModel.FetchedPageResult.Loading -> showLoadingMoreProgressBar()
+                        is RemoteViewModel.FetchedPageResult.NoMoreDataAvailable -> showNoDataSnackBar()
+                        is RemoteViewModel.FetchedPageResult.Success -> setNewData(result.data)
+                    }
+                }
+            }
+        }
 
-        // remoteViewModel.fetchNextPage()
+        remoteViewModel.fetchNextPage()
     }
 
-    private fun loadNewData(data: List<Item>) {
-        // val adapter = binding.commonListView.listView.adapter as ListViewAdapter
-        // adapter.submitList(data)
+    private fun setNewData(data: List<Item>) {
+        val adapter = binding.commonListView.listView.adapter as ListViewAdapter
+        adapter.submitList(data)
+        // hideProgressBar()
+    }
+
+    private fun hideProgressBar() {
+        TODO("Not yet implemented")
+    }
+
+    private fun showNoDataSnackBar() {
+        TODO("Not yet implemented")
     }
 
     private fun showLoadingMoreProgressBar() {
