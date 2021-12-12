@@ -39,3 +39,15 @@ what is with this avatar thing
     - TBH, I do not want to use two different list layout.
     - I have no problem with loading images, 4 lines of glide and it will work
     - ignoring/skipping for now
+
+
+Why not Compose??
+    - I know it's the new way to do Ui in android
+    - in my opinion, it implements PAC architecture
+    - I do not fear compose, rather testing.
+        - idk anything about how to test there.
+        - also most testing libs are in alpha, and buggy
+    - I could have but this project's deadline, won't let me
+    - next projects will be composed based
+    - see front-end T0D0 app which is written with react
+        - to know how I used PAC library. (spolier: I used it the PAC way ;))
