@@ -30,7 +30,6 @@ import sku.challenge.atmanatodoapp.ui.remote.RemoteFragment
 @RunWith(AndroidJUnit4::class)
 @UninstallModules(AppModule::class)
 @HiltAndroidTest
-@Ignore
 class RemoteFragmentTest {
 
     // TODO
@@ -54,7 +53,7 @@ class RemoteFragmentTest {
         repository as FakeRepository
         repository.pageNo = 1
         repository.delayBeforeReturningResult = 10L
-        repository.fetchedPage = DummyData.fetchedPage(1, 1, 6)
+        repository.fetchedPage = DummyData.fetchedPage(1, 1, 20)
 
         launchFragmentInHiltContainer<RemoteFragment> {
             dataBindingIdlingResourceRule.monitorFragment(this)
@@ -62,8 +61,10 @@ class RemoteFragmentTest {
     }
 
     @Test
-    fun loadItems_WhenFragmentIsSetUp(): Unit = runBlocking {
+    fun itemsAreLoaded_WhenFragmentIsSetUp(): Unit = runBlocking {
         onView(listMatcher().atPosition(1)).check(matches(hasDescendant(withText("Firstname2-1 Lastname2-1"))))
+
+        // assert edit and delete items are not visible
     }
 
     @Test
