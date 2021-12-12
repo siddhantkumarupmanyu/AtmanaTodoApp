@@ -1,4 +1,5 @@
 # AtmanaTodoApp
+[![check](https://github.com/siddhantkumarupmanyu/AtmanaTodoApp/actions/workflows/check.yml/badge.svg)](https://github.com/siddhantkumarupmanyu/AtmanaTodoApp/actions/workflows/check.yml) <br /> <br />
 Assignment Project. <br />
 It has two screens, one for Remote Data, which we cannot add or edit. And another screen which contains local data. <br />
 Room is used for storing data locally. <br />
