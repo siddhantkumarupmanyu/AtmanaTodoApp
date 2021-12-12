@@ -4,6 +4,8 @@ It has two screens, one for Remote Data, which we cannot add or edit. And anothe
 Room is used for storing data locally. <br />
 Since, I am in love with TDD, you can know more by looking at the code. It can answer better than me :)
 
+https://user-images.githubusercontent.com/66074842/145705769-4f6edf65-3fb4-4192-bd3a-0730ff132ac1.mp4
+
 ## Features
 - Pagination. i.e. automatically load data at reaching end
 - Progress Bar when loading
